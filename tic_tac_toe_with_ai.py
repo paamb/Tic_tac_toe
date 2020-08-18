@@ -28,12 +28,11 @@ def make_a_move(row, col, player, move_counter):
 
 def mini_max_scoring(board, player):
     #Checking horisontals
-    print(player)
+    # print(player)
     for i in range(len(board)):
-        print(board)
-        if board[i][0] == board[i][1] == board[i][2] == "hei":
-            # print(print_board(board))
-            print("nice")
+        # print(board)
+        if board[i][0] == board[i][1] == board[i][2] == player:
+            print(print_board(board))
             if player == "X":
                 return 10
             if player == "O":
@@ -41,25 +40,26 @@ def mini_max_scoring(board, player):
     #Checking verticals
     for i in range (len(board)):
         if board[0][i] == board[1][i] == board[2][i] == player:
-            print(print_board(board))
-            print("nice1")
+            # print(print_board(board))
             if player == "X":
                 return 10
             if player == "O":
                 return -10
     #Checking diagonals
     if board[0][0] == board[1][1] == board[2][2] == player:
-        print("nice2")
         if player == "X":
             return 10
         if player == "O":
             return -10
     if board[0][2] == board[1][1] == board[2][0] == player:
-        print("nice3")
         if player == "X":
             return 10
         if player == "O":
             return -10
+    for i in range(3):
+        for j in range(3):
+            if board[i][j] == "_":
+                return None
     return 0
 
 def game_end(board, player):
@@ -95,7 +95,7 @@ def play(move_counter):
     # else:
     #     print("GAME OVER")
 def best_ai_move(board):
-    best_move_score = -100
+    best_move_score = -math.inf
     best_move_x = -1
     best_move_y = -1
     for i in range(3):
@@ -104,49 +104,41 @@ def best_ai_move(board):
                 board[i][j] = "X"
                 player = "O"
                 value_of_move = mini_max(board, 0, False, player)
-                print(value_of_move)
-                board[i][j] = "_"
+                # print(value_of_move)
                 if best_move_score < value_of_move:
-                    # print("halla")
+                    print(best_move_x, best_move_y)
                     best_move_score = value_of_move
                     best_move_x = i
                     best_move_y = j
+                board[i][j] = "_"
     return (best_move_x, best_move_y)
 
 def mini_max(pos, depth, maximizing_player, player):
-    # print("yo")
     score = mini_max_scoring(board, player)
     if score == 10:
-        print("score1")
         return score
     if score == -10:
-        print("score2")
         return score
-    if score == 0 and depth == 4:
-        print("score3")
+    if score == 0:
         return score
     if maximizing_player:
-        print("yo2")
         best_val = -(math.inf)
         for i in range(3):
             for j in range(3):
                 if board[i][j] == "_":
-                    player = "X"
+                    player = "O"
                     board[i][j] == "X"
-                    print("halla2")
                     value = mini_max(board, depth +1, False, player)
                     board[i][j] = "_"
                     best_val = max(best_val, value)
         return best_val
     else:
-        print("yo2")
         best_val = math.inf
         for i in range(3):
             for j in range(3):
                 if board[i][j] == "_":
-                    player = "O"
+                    player = "X"
                     board[i][j] == "O"
-                    print("halla3")
                     value = mini_max(board, depth +1, True, player)
                     board[i][j] = "_"
                     best_val = min(best_val, value)
