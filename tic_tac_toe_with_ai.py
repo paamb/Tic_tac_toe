@@ -14,6 +14,7 @@ def print_board(board):
                 if j != 0:
                     print(" | ", end="")
                 print(board[i][j], end="")
+        print("\n\n")
 
 def make_a_move(row, col, player, move_counter):
     row = int(row)
@@ -31,27 +32,27 @@ def mini_max_scoring(board, player):
     # print(player)
     for i in range(len(board)):
         # print(board)
-        if board[i][0] == board[i][1] == board[i][2] == player:
-            print(print_board(board))
+        if board[i][0] == board[i][1] == board[i][2] != '_':
+            # print(print_board(board))
             if player == "X":
                 return 10
             if player == "O":
                 return -10
     #Checking verticals
     for i in range (len(board)):
-        if board[0][i] == board[1][i] == board[2][i] == player:
+        if board[0][i] == board[1][i] == board[2][i]!= '_':
             # print(print_board(board))
             if player == "X":
                 return 10
             if player == "O":
                 return -10
     #Checking diagonals
-    if board[0][0] == board[1][1] == board[2][2] == player:
+    if board[0][0] == board[1][1] == board[2][2]!= '_':
         if player == "X":
             return 10
         if player == "O":
             return -10
-    if board[0][2] == board[1][1] == board[2][0] == player:
+    if board[0][2] == board[1][1] == board[2][0]!= '_':
         if player == "X":
             return 10
         if player == "O":
@@ -86,16 +87,17 @@ def play(move_counter):
         player = 'O'
         move_counter = make_a_move(row, col, player, move_counter)
     else:
-        print("\n\n")
+        # print("\n\n")
         row, col = best_ai_move(board)
         player = 'X'
         move_counter = make_a_move(row, col, player, move_counter)
     if game_end(board, player) == False:
         play(move_counter)
-    # else:
-    #     print("GAME OVER")
+    else:
+        print_board(board)
+        print("GAME OVER")
 def best_ai_move(board):
-    best_move_score = -math.inf
+    best_move_score = math.inf
     best_move_x = -1
     best_move_y = -1
     for i in range(3):
@@ -104,8 +106,8 @@ def best_ai_move(board):
                 board[i][j] = "X"
                 player = "O"
                 value_of_move = mini_max(board, 0, False, player)
-                # print(value_of_move)
-                if best_move_score < value_of_move:
+                print(f'Move value {value_of_move}, {i} {j}')
+                if best_move_score > value_of_move:
                     print(best_move_x, best_move_y)
                     best_move_score = value_of_move
                     best_move_x = i
@@ -113,35 +115,31 @@ def best_ai_move(board):
                 board[i][j] = "_"
     return (best_move_x, best_move_y)
 
-def mini_max(pos, depth, maximizing_player, player):
+def mini_max(board, depth, maximizing_player, player):
     score = mini_max_scoring(board, player)
-    if score == 10:
-        return score
-    if score == -10:
-        return score
-    if score == 0:
+    if score is not None:
         return score
     if maximizing_player:
-        best_val = -(math.inf)
+        best_val = (math.inf)
         for i in range(3):
             for j in range(3):
                 if board[i][j] == "_":
                     player = "O"
-                    board[i][j] == "X"
+                    board[i][j] = "X"
                     value = mini_max(board, depth +1, False, player)
                     board[i][j] = "_"
-                    best_val = max(best_val, value)
+                    best_val = min(best_val, value)
         return best_val
     else:
-        best_val = math.inf
+        best_val = -math.inf
         for i in range(3):
             for j in range(3):
                 if board[i][j] == "_":
                     player = "X"
-                    board[i][j] == "O"
+                    board[i][j] = "O"
                     value = mini_max(board, depth +1, True, player)
                     board[i][j] = "_"
-                    best_val = min(best_val, value)
+                    best_val = max(best_val, value)
         return best_val                                                                                                           
 
 play(move_counter)
