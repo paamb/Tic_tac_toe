@@ -31,7 +31,7 @@ def mini_max_scoring(board, player):
     # print(player)
     for i in range(len(board)):
         if board[i][0] == board[i][1] == board[i][2] == player:
-            print(print_board(board))
+            # print(print_board(board))
             if player == "X":
                 return 10
             if player == "O":
@@ -101,7 +101,7 @@ def best_ai_move(board):
         for j in range(3):
             if board[i][j] == "_":
                 board[i][j] = "X"
-                player = "O"
+                player = "X"
                 value_of_move = mini_max(board, 0, False, player)
                 # print(value_of_move)
                 if best_move_score < value_of_move:
@@ -114,14 +114,14 @@ def best_ai_move(board):
 
 def mini_max(pos, depth, maximizing_player, player):
     score = mini_max_scoring(board, player)
-    if score != None:
+    if score is not None:
         return score
     if maximizing_player:
         best_val = -(math.inf)
         for i in range(3):
             for j in range(3):
                 if board[i][j] == "_":
-                    player = "O"
+                    player = "X"
                     board[i][j] = "X"
                     value = mini_max(board, depth +1, False, player)
                     board[i][j] = "_"
@@ -132,7 +132,7 @@ def mini_max(pos, depth, maximizing_player, player):
         for i in range(3):
             for j in range(3):
                 if board[i][j] == "_":
-                    player = "X"
+                    player = "O"
                     board[i][j] = "O"
                     value = mini_max(board, depth +1, True, player)
                     board[i][j] = "_"
