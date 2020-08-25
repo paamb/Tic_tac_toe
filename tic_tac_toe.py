@@ -1,6 +1,9 @@
 import numpy as np
+import math
 board = [['_','_','_'],['_','_','_'],['_','_','_']]
+rewards = [1,0,-1]
 move_counter = 0
+
 def print_board(board):
         for i in range (len(board)):
             if i != 0:
@@ -10,16 +13,16 @@ def print_board(board):
                     print(" | ", end="")
                 print(board[i][j], end="")
 
-def make_a_move(row, col, player, move_counter):
+def make_a_move(row, col, player, move_counter, board):
+    print("hallqa")
     row = int(row)
     col = int(col)
-    print(player)
     if board[row][col] == '_':
         board[row][col] = player
         move_counter += 1
     else:
         print("Feltet er tatt velg et annet")
-    return move_counter
+    return board, move_counter
 
 def game_end(board, player):
     #Checking horisontals
@@ -38,21 +41,22 @@ def game_end(board, player):
        
     return False
 
-def play(move_counter):
+def play_without_ai(move_counter):
     print_board(board)
     if move_counter%2:
         print("\n\n")
         row, col= input("Skriv inn trekk: ").split()
         player = 'O'
-        move_counter = make_a_move(row, col, player, move_counter)
+        move_counter = make_a_move(row, col, player, move_counter, board)
     else:
         print("\n\n")
-        row, col = input("Skriv inn trekk: ").split()
+        row, col= input("Skriv inn trekk: ").split()
         player = 'X'
-        move_counter = make_a_move(row, col, player, move_counter)
+        move_counter = make_a_move(row, col, player, move_counter, board)
     if game_end(board, player) == False:
-        play(move_counter)
+        play_without_ai(move_counter)
     else:
-        print("Spiller", player, "vant!")
-
-play(move_counter)
+        if player == 'X':
+            print("vant!")
+        else:
+            print("vant! jeg")                                                                                                         

@@ -1,5 +1,6 @@
 import numpy as np
 import math
+from tic_tac_toe import make_a_move, print_board, game_end
 board = [['_','_','_'],['_','_','_'],['_','_','_']]
 rewards = [1,0,-1]
 move_counter = 0
@@ -7,34 +8,16 @@ winning_boards = 0
 losing_boards = 0
 draw_boards = 0
 
+
 ai = "X"
 player = "O"
 def start(move_counter):
-    starting_player = input("Do you want to start (y/n)?")
+    starting_player = input("Do you want the ai to start (y/n)?")
     if starting_player == "y":
         move_counter = 0
     else:
         move_counter = 1
-    play(move_counter)
-
-def print_board(board):
-        for i in range (len(board)):
-            if i != 0:
-                print("\n","- - - - -")
-            for j in range (len(board)):
-                if j != 0:
-                    print(" | ", end="")
-                print(board[i][j], end="")
-
-def make_a_move(row, col, player, move_counter):
-    row = int(row)
-    col = int(col)
-    if board[row][col] == '_':
-        board[row][col] = player
-        move_counter += 1
-    else:
-        print("Feltet er tatt velg et annet")
-    return move_counter
+    play_ai(board, move_counter)
 
 def mini_max_scoring(board, player):
     #Checking horisontals
@@ -68,29 +51,13 @@ def mini_max_scoring(board, player):
                 return None
     return 0
 
-def game_end(board, player):
-    #Checking horisontals
-    for i in range(len(board)):
-        if board[i][0] == board[i][1] == board[i][2] == player:
-            return True
-    #Checking verticals
-    for i in range (len(board)):
-        if board[0][i] == board[1][i] == board[2][i] == player:
-            return True
-    #Checking diagonals
-    if board[0][0] == board[1][1] == board[2][2] == player:
-        return True
-    if board[0][2] == board[1][1] == board[2][0] == player:
-        return True  
-    return False
-
-def play(move_counter):
+def play_ai(board, move_counter):
     print_board(board)
     if move_counter%2:
         print("\n\n\n")
         row, col= input("Skriv inn trekk: ").split()
         player = 'O'
-        move_counter = make_a_move(row, col, player, move_counter)
+        board, move_counter = make_a_move(row, col, player, move_counter, board)
     else:
         print("\n\n\n")
         row, col = best_ai_move(board)
@@ -98,7 +65,7 @@ def play(move_counter):
         board[row][col] = player 
         move_counter += 1
     if game_end(board, player) == False:
-        play(move_counter)
+        play_ai(board, move_counter)
     else:
         print_board(board)
         print("\n")
@@ -164,7 +131,5 @@ def mini_max(pos, depth, maximizing_player, player, different_outcomes):
                     best_val = min(best_val, value)
         return best_val                                                                                                        
 
-start(move_counter)
-
-
-#Viser for den over. Og viser for alle verdier og ikke de verdiene som er de beste
+if __name__ == '__main__':
+    start(move_counter)
